@@ -1,6 +1,6 @@
 import pygame
 
-from components import player
+from components.ball import Ball
 from components.player import Player
 from utils.constants import (
     SCREEN_HEIGHT,
@@ -20,7 +20,9 @@ class Game:
     def run(self):
         self.create_components()
         # Game loop:
+
         self.playing = True
+
         while self.playing:
             self.clock.tick(60)
             self.events()
@@ -32,6 +34,11 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         player = Player()
         self.all_sprites.add(player)
+
+        balls = pygame.sprite.Group()
+        ball = Ball()
+        self.all_sprites.add(ball)
+
 
     def update(self):
         self.all_sprites.update()
