@@ -13,6 +13,7 @@ allowed_speed = list(range(3,5))
 class Ball(pygame.sprite.Sprite):
 
     def __init__(self):
+
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((30, 40))
         self.image.fill(BLUE)
