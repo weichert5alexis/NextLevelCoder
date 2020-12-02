@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = SCREEN_WIDHT/2
         self.rect.bottom = SCREEN_HEIGHT - 10
-
+        self.bullets = pygame.sprite.Group()
 
 
     def update(self):                                                    #def update(self):
@@ -46,5 +46,4 @@ class Player(pygame.sprite.Sprite):
     def shoot(self):
         bullet = Bullet(self.rect.centerx, self.rect.top)
         self.game.all_sprites.add(bullet)
-        self.bullets = pygame.sprite.Group()
         self.bullets.add(bullet)
