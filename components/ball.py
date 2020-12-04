@@ -1,11 +1,13 @@
 import pygame
 
 from utils.constants import(
-    BLUE,
+    BLACK,
     SCREEN_HEIGHT,
     SCREEN_WIDHT,
+    IMG_DIR
 )
 
+from os import path
 import random
 
 allowed_speed = list(range(3,5))
@@ -15,8 +17,9 @@ class Ball(pygame.sprite.Sprite):
     def __init__(self, size):
 
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(BLUE)
+        self.image = pygame.image.load(path.join(IMG_DIR, "blue.png")).convert()
+        self.image = pygame.transform.scale(self.image, (100//size, 100//size))
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
 
         #aparicion de bola a los dos lados de la pantalla

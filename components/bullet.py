@@ -1,13 +1,15 @@
 import pygame
 
-from utils.constants import (WHITE, SCREEN_WIDHT, SCREEN_HEIGHT)
+from os import path
+from utils.constants import (BLACK, SCREEN_WIDHT, SCREEN_HEIGHT, IMG_DIR)
 
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((4,8))
-        self.image.fill(WHITE)
+        self.image = pygame.image.load(path.join(IMG_DIR, "bullet.png")).convert()
+        self.image = pygame.transform.scale(self.image, (10 , 10))
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
 
         self.rect.bottom = y

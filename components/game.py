@@ -7,20 +7,30 @@ from utils.constants import (
     SCREEN_HEIGHT,
     SCREEN_WIDHT,
     TITLE,
-    BLACK
+    BLACK,
+    IMG_DIR
 )
 
+from os import path
+from utils.text_utils import draw_text
 
 class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
         self.screen = pygame.display.set_mode((SCREEN_WIDHT, SCREEN_HEIGHT))
+        self.background_img = pygame.image.load(path.join(IMG_DIR, "spacefield.png")).convert()
+        self.background_img = pygame.transform.scale(self.background_img, (SCREEN_WIDHT, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
+        self.playing = False
+        self.running = True
+        pygame.mixer.init()
+        pygame.mixer.music.load(path.join(IMG_DIR, "town4.mp3"))
+        pygame.mixer.music.play(-1)
 
     def run(self):
         self.create_components()
-        # Game loop:
+        # Game loop: events - update - draw
 
         self.playing = True
 
@@ -29,7 +39,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
-        pygame.quit()  # terminar juego:cerrar pantalla
+
 
     def create_components(self):
         self.all_sprites = pygame.sprite.Group()
@@ -64,11 +74,30 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
+                self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     self.player.shoot()
 
     def draw(self):
-        self.screen.fill(BLACK)
+        background_rect = self.background_img.get_rect()
+        self.screen.blit(self.background_img, background_rect)
         self.all_sprites.draw(self.screen)
         pygame.display.flip()
+
+    def show_start_screen(self):
+        self.screen.blit(self.background_img, self.background_img.get_rect())
+        draw_text(self.screen, "Game working", 64, SCREEN_WIDHT/2, SCREEN_HEIGHT/4)
+        draw_text(self.screen, "Presione las flechas para moverse y SPACE para disparar", 20, SCREEN_WIDHT / 2, SCREEN_HEIGHT / 2)
+        draw_text(self.screen, "Prsionar Enter para iniciar", 20, SCREEN_WIDHT / 2, SCREEN_HEIGHT*3/5)
+        pygame.display.flip()
+        waiting = True
+        while waiting:
+            self.clock.tick(60)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(0)
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_RETURN:
+                        waiting = False
