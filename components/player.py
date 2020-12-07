@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, game):
         pygame.sprite.Sprite.__init__(self)
         self.game = game
-        self.image = pygame.image.load(path.join(IMG_DIR, "alien.png"))
+        self.image = pygame.image.load(path.join(IMG_DIR, "sheriff.png")).convert()
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.image.set_colorkey(BLACK) #fondo
         self.rect = self.image.get_rect()
@@ -43,12 +43,19 @@ class Player(pygame.sprite.Sprite):
                                                                             #
         # Jugador no salga de la pantalla por el lado izquierdo             #
                                                                             #
-        if self.rect.left <= 0:                                             #
-            self.rect.left = 0                                              #
+        if self.rect.x <= 0:                                             #
+            self.rect.x = 0                                              #
 
     def shoot(self):
+
         sound_rifle = pygame.mixer.Sound(path.join(IMG_DIR, "rifle.ogg"))
         pygame.mixer.Sound.play(sound_rifle)
         bullet = Bullet(self.rect.centerx, self.rect.top)
         self.game.all_sprites.add(bullet)
         self.bullets.add(bullet)
+
+
+
+
+
+
