@@ -17,7 +17,7 @@ class Ball(pygame.sprite.Sprite):
     def __init__(self, size):
 
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(path.join(IMG_DIR, "botella.png")).convert()
+        self.image = pygame.image.load(path.join(IMG_DIR, "botellaa.png")).convert()
         self.image = pygame.transform.scale(self.image, (100//size, 100//size))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()

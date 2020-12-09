@@ -1,5 +1,7 @@
 import pygame
 
+from components.power_up import Fruit
+
 from utils.text_utils import draw_text
 
 from components.ball import Ball
@@ -10,7 +12,8 @@ from utils.constants import (
     SCREEN_HEIGHT,
     TITLE,
     BLACK,
-    IMG_DIR
+    IMG_DIR,
+    #FPS
 )
 
 
@@ -20,13 +23,16 @@ class Game:
         pygame.display.set_caption(TITLE)
         self.screen = pygame.display.set_mode((SCREEN_WIDHT, SCREEN_HEIGHT))
         self.background_img = pygame.image.load(path.join(IMG_DIR, "desierto.jpg")).convert()
+        #background
         self.background_img = pygame.transform.scale(self.background_img, (SCREEN_WIDHT, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
         self.running = True
+        self.condic = False
         pygame.mixer.init()
         pygame.mixer.music.load(path.join(IMG_DIR, "town4.mp3"))
         pygame.mixer.music.play(-1)
+        self.contador = 0
 
 
 
@@ -45,15 +51,18 @@ class Game:
 
     def create_components(self):
         self.all_sprites = pygame.sprite.Group()
-        self.balls = pygame.sprite.Group()
-
-
         self.player = Player(self)
         self.all_sprites.add(self.player)
+        self.balls = pygame.sprite.Group()
 
         ball = Ball(1)
         self.all_sprites.add(ball)
         self.balls.add(ball)
+
+        self.fruits = pygame.sprite.Group()
+        fruit = Fruit()
+        self.fruits.add(fruit)
+        self.all_sprites.add(fruit)
 
 
     def update(self):
@@ -64,9 +73,9 @@ class Game:
         if hits:
             self.playing = False
 
-
         hits = pygame.sprite.groupcollide(self.balls, self.player.bullets, True, True)
-
+        if hits:
+            self.contador += 1
 
         for hit in hits:
             if hit.size < 4:
@@ -75,7 +84,10 @@ class Game:
                     self.all_sprites.add(ball)
                     self.balls.add(ball)
 
-
+        hit = pygame.sprite.spritecollide(self.player, self.fruits, True)
+        if hit:
+            self.condic = True
+            #print("fruit")
 
     def events(self):
     # pygame.events() : para traer eventos que hay
@@ -85,7 +97,10 @@ class Game:
                 self.running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    self.player.shoot()
+                    self.player.shoot(self.condic)
+            elif self.contador == 10:
+                self.condic = False
+            
 
 
     def draw(self):
